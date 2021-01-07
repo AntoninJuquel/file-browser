@@ -137,15 +137,7 @@
              "type":"NONE",
              "path":"C%3A%5CWoodyTempFolder"
           }
-       },
-       {
-         "Date":"2020-11-23 09:59:37",
-         "Name":"Temp",
-         "AVStruct":{
-            "type":"NONE",
-            "path":"C%3A%5CWoodyTempFolder%5CTemp"
-         }
-      }
+       }
     ],
     "Files":[
        {

@@ -3,7 +3,9 @@ import MyFileBrowser from './components/MyFileBrowser';
 
 function App() {
   return (
-    <MyFileBrowser/>
+    <div style={{ height: 900 }}>
+      <MyFileBrowser />
+    </div>
   );
 }
 
