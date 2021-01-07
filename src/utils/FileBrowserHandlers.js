@@ -51,11 +51,11 @@ export function handleDeleteFiles(params) {
 
 export function handleCreateFolder(params) {
     const { files, setFiles, folderChain } = params
-    let Name = prompt("Enter file name")
+    let Name = prompt("Enter folder name")
     let newFile = parseFile(
         {
             Name,
-            Date: new Date().toTimeString(),
+            Date: new Date().toLocaleDateString().replace(new RegExp("/", "g"), "-").split("-").reverse().join("-") + " " + new Date().toLocaleTimeString(),
             AVStruct: { path: folderChain[0].name + "/" + Name }
         },
         files.length,
