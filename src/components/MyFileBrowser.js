@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { FullFileBrowser, ChonkyActions } from "chonky";
 
-import { handleCreateFolder, handleDeleteFiles, handleOpenFiles } from "../utils/FileBrowserHandlers";
+import { handleJsonBrowser,handleCreateFolder, handleDeleteFiles, handleOpenFiles } from "../utils/FileBrowserHandlers";
+
+import jsonBrowser from "../json/broswer-2.json";
 
 export default function MyFileBrowser() {
     const [files, setFiles] = useState([])
@@ -22,7 +24,7 @@ export default function MyFileBrowser() {
             folderChain,
             setFolderChain
         }
-        console.log(handler)
+        //console.log(handler)
         switch (data.id) {
             case ChonkyActions.OpenFiles.id:
                 handleOpenFiles(handler)
@@ -37,6 +39,15 @@ export default function MyFileBrowser() {
                 break;
         }
     }
+    handleJsonBrowser(
+        {
+            jsonBrowser,
+            files,
+            setFiles,
+            folderChain,
+            setFolderChain
+        }
+    )
     return (
         <FullFileBrowser
             folderChain={folderChain}
