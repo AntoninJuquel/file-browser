@@ -41,7 +41,7 @@ export function handleOpenFiles(params) {
         newFolderChain = [...folderChain, selectedFile]
 
     setFolderChain(newFolderChain)
-    //setFiles([null])
+    //setFiles(handleJsonBrowser(JSONCALLAPI))
 }
 
 export function handleDeleteFiles(params) {
@@ -55,7 +55,7 @@ export function handleCreateFolder(params) {
     let newFile = parseFile(
         {
             Name,
-            Date: new Date().toLocaleDateString().replace(new RegExp("/", "g"), "-").split("-").reverse().join("-") + " " + new Date().toLocaleTimeString(),
+            Date: new Date().toLocaleDateString().split("/").reverse().join("-") + " " + new Date().toLocaleTimeString(),
             AVStruct: { path: folderChain[0].name + "/" + Name }
         },
         files.length,
