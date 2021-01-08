@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
-import { FullFileBrowser, ChonkyActions } from "chonky";
+import { FullFileBrowser, ChonkyActions, defineFileAction } from "chonky";
 
-import { handleJsonBrowser, handleCreateFolder, handleDeleteFiles, handleOpenFiles } from "../utils/FileBrowserHandlers";
+import { handleJsonBrowser, handleCreateFolder, handleDeleteFiles, handleOpenFiles, handleScanFolder } from "../utils/FileBrowserHandlers";
 
 import jsonBrowser from "../json/broswer-2.json";
 import CustomButtons from "./CustomButtons";
@@ -10,7 +10,18 @@ export default function MyFileBrowser() {
     const [files, setFiles] = useState(handleJsonBrowser(jsonBrowser).files)
     const [folderChain, setFolderChain] = useState(handleJsonBrowser(jsonBrowser).folderChain)
 
+    const scanFolder = defineFileAction({
+        id: "scan_folder",
+        button: {
+            name: "Scan",
+            toolbar: true,
+            contextMenu: true,
+            tooltip: "Scan the directory"
+        },
+    });
+
     const fileActions = [
+        scanFolder,
         ChonkyActions.OpenFiles,
         ChonkyActions.OpenSelection,
         ChonkyActions.CreateFolder,
@@ -35,6 +46,9 @@ export default function MyFileBrowser() {
                 break;
             case ChonkyActions.DeleteFiles.id:
                 handleDeleteFiles(handler)
+                break;
+            case scanFolder.id:
+                handleScanFolder(handler);
                 break;
             default:
                 break;

@@ -68,3 +68,7 @@ export function handleCreateFolder(params) {
     )
     setFiles([...files, newFile])
 }
+
+export function handleScanFolder(params) {
+    console.log("SCAN FOLDER API")
+}
