@@ -38,6 +38,7 @@ export function handleJsonBrowser(jsonBrowser) {
 export function handleOpenFiles(params) {
     const { data, setFiles, folderChain, setFolderChain } = params
     let selectedFile = data.payload.files[0]
+
     if (!selectedFile.isDir) {
         console.log("OPEN FILE API type of " + selectedFile.type)
         return
@@ -77,4 +78,21 @@ export function handleCreateFolder(params) {
 export function handleScanFolder(params) {
     console.log("SCAN FOLDER API")
     console.log(params)
+}
+
+function HttpReq() {
+    const http = require("http")
+
+    let options = new URL("https://postman-echo.com/status/200")
+    
+    let myRequest = http.request(options, res => {
+      // Same as previos example
+      res.on('data', d => {
+        console.log(d)
+      })
+      //... etc
+    })
+    
+    myRequest.on("error", console.error)
+    myRequest.end()
 }

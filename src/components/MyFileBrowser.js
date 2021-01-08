@@ -16,7 +16,8 @@ export default function MyFileBrowser() {
             name: "Scan",
             toolbar: true,
             contextMenu: true,
-            tooltip: "Scan the directory"
+            tooltip: "Scan the directory",
+            icon: "search"
         },
     });
 
