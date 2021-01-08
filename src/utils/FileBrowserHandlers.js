@@ -5,7 +5,8 @@ function parseFile(file, index, isDir) {
         isDir,
         modDate: file.Date,
         childrenCount: isDir && (file.count === undefined ? 0 : file.count),
-        path: file.AVStruct !== undefined && unescape(file.AVStruct.path).replace("\\", "/").split("/")
+        path: isDir && unescape(file.AVStruct.path).replace("\\", "/").split("/"),
+        type: isDir ? file.AVStruct.type : file.AVType
     }
 }
 
@@ -34,6 +35,10 @@ export function handleJsonBrowser(jsonBrowser) {
 export function handleOpenFiles(params) {
     const { data, setFiles, folderChain, setFolderChain } = params
     let selectedFile = data.payload.files[0]
+    if(!selectedFile.isDir){
+        console.log("OPEN FILE API")
+        return
+    }
     let newFolderChain = []
     if (folderChain.includes(selectedFile))
         newFolderChain = folderChain.slice(0, folderChain.indexOf(selectedFile) + 1)
@@ -41,7 +46,7 @@ export function handleOpenFiles(params) {
         newFolderChain = [...folderChain, selectedFile]
 
     setFolderChain(newFolderChain)
-    //setFiles(handleJsonBrowser(JSONCALLAPI))
+    /*setFiles(handleJsonBrowser(JSONCALLAPI))*/console.log("SEND ME CHILDRENS FILE API")
 }
 
 export function handleDeleteFiles(params) {
