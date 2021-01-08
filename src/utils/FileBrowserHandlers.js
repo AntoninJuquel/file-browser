@@ -71,4 +71,5 @@ export function handleCreateFolder(params) {
 
 export function handleScanFolder(params) {
     console.log("SCAN FOLDER API")
+    console.log(params.files)
 }
