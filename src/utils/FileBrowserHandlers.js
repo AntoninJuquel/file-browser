@@ -1,4 +1,5 @@
 function parseFile(file, index, isDir) {
+    let type = isDir ? file.AVStruct.type : file.AVType
     return {
         id: index + 1,
         name: unescape(file.Name),
@@ -6,7 +7,9 @@ function parseFile(file, index, isDir) {
         modDate: file.Date,
         childrenCount: isDir && (file.count === undefined ? 0 : file.count),
         path: isDir && unescape(file.AVStruct.path).replace("\\", "/").split("/"),
-        type: isDir ? file.AVStruct.type : file.AVType
+        type: type,
+        icon: { isDir, type },
+        customData: ["Ici une info supplémentaire de type string", { info: "sous de type objet" }]
     }
 }
 
@@ -29,15 +32,17 @@ export function handleJsonBrowser(jsonBrowser) {
         files.length,
         true
     )))
-
     return { files, folderChain }
 }
+
 export function handleOpenFiles(params) {
     const { data, setFiles, folderChain, setFolderChain } = params
     let selectedFile = data.payload.files[0]
-    if(!selectedFile.isDir){
-        console.log("OPEN FILE API")
+    if (!selectedFile.isDir) {
+        console.log("OPEN FILE API type of " + selectedFile.type)
         return
+    } else if (selectedFile.type !== "NONE") {
+        console.log(selectedFile.type)
     }
     let newFolderChain = []
     if (folderChain.includes(selectedFile))
@@ -46,7 +51,7 @@ export function handleOpenFiles(params) {
         newFolderChain = [...folderChain, selectedFile]
 
     setFolderChain(newFolderChain)
-    /*setFiles(handleJsonBrowser(JSONCALLAPI))*/console.log("SEND ME CHILDRENS FILE API")
+    /*setFiles(handleJsonBrowser(JSONCALLAPI))*/console.log(data)
 }
 
 export function handleDeleteFiles(params) {
@@ -71,5 +76,5 @@ export function handleCreateFolder(params) {
 
 export function handleScanFolder(params) {
     console.log("SCAN FOLDER API")
-    console.log(params.files)
+    console.log(params)
 }
