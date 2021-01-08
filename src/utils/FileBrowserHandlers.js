@@ -52,7 +52,7 @@ export function handleOpenFiles(params) {
         newFolderChain = [...folderChain, selectedFile]
 
     setFolderChain(newFolderChain)
-    /*setFiles(handleJsonBrowser(JSONCALLAPI))*/console.log(data)
+    /*setFiles(handleJsonBrowser(JSONCALLAPI).files)*/console.log(data)
 }
 
 export function handleDeleteFiles(params) {
