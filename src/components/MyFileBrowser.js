@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FullFileBrowser, ChonkyActions } from "chonky";
 
 import { handleJsonBrowser, handleCreateFolder, handleDeleteFiles, handleOpenFiles } from "../utils/FileBrowserHandlers";
 
 import jsonBrowser from "../json/broswer-2.json";
+import CustomButtons from "./CustomButtons";
 
 export default function MyFileBrowser() {
     const [files, setFiles] = useState(handleJsonBrowser(jsonBrowser).files)
@@ -39,12 +40,19 @@ export default function MyFileBrowser() {
                 break;
         }
     }
+
+    const fileBrowserRef = useRef(null)
     return (
-        <FullFileBrowser
-            folderChain={folderChain}
-            files={files}
-            onFileAction={onFileAction}
-            fileActions={fileActions}
-        />
+        <>
+            <CustomButtons fileBrowserRef={fileBrowserRef} files={files} />
+            <FullFileBrowser
+                folderChain={folderChain}
+                files={files}
+                onFileAction={onFileAction}
+                fileActions={fileActions}
+                defaultFileViewActionId="enable_list_view"
+                ref={fileBrowserRef}
+            />
+        </>
     )
 }
