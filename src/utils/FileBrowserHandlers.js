@@ -13,7 +13,7 @@ function parseFile(file, index, isDir) {
     }
 }
 
-export function handleJsonBrowser(jsonBrowser) {
+function handleJsonBrowser(jsonBrowser) {
     let files = []
 
     jsonBrowser.SubFolders.forEach((folder, index) => {
@@ -39,6 +39,14 @@ export function handleOpenFiles(params) {
     const { data, setFiles, folderChain, setFolderChain } = params
     let selectedFile = data.payload.files[0]
 
+    fetch("http://localhost:3000/directories/" + selectedFile.name)
+        .then(res => res.json())
+        .then(result => {
+            const { files } = handleJsonBrowser(result.directory)
+            setFiles(files)
+        })
+        .catch(console.log)
+
     if (!selectedFile.isDir) {
         console.log("OPEN FILE API type of " + selectedFile.type)
         return
@@ -52,7 +60,7 @@ export function handleOpenFiles(params) {
         newFolderChain = [...folderChain, selectedFile]
 
     setFolderChain(newFolderChain)
-    /*setFiles(handleJsonBrowser(JSONCALLAPI).files)*/console.log(data)
+    //setFiles(handleJsonBrowser(JSONCALLAPI).files)console.log(data)
 }
 
 export function handleDeleteFiles(params) {
@@ -78,21 +86,4 @@ export function handleCreateFolder(params) {
 export function handleScanFolder(params) {
     console.log("SCAN FOLDER API")
     console.log(params)
-}
-
-function HttpReq() {
-    const http = require("http")
-
-    let options = new URL("https://postman-echo.com/status/200")
-    
-    let myRequest = http.request(options, res => {
-      // Same as previos example
-      res.on('data', d => {
-        console.log(d)
-      })
-      //... etc
-    })
-    
-    myRequest.on("error", console.error)
-    myRequest.end()
 }

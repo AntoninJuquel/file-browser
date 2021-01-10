@@ -1,0 +1,188 @@
+{
+    "directories": [
+        {
+            "id": "c",
+            "directory": {
+                "SubFolders": [
+                    {
+                        "Date": "2020-12-15 14:56:34",
+                        "Name": "%24WINDOWS.~BT",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5C%24WINDOWS.~BT"
+                        }
+                    },
+                    {
+                        "Date": "2020-12-31 10:22:14",
+                        "Name": "Apps",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CApps"
+                        }
+                    },
+                    {
+                        "Date": "2021-01-05 14:37:44",
+                        "Name": "avid",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5Cavid"
+                        }
+                    },
+                    {
+                        "Date": "2020-11-12 18:10:28",
+                        "Name": "Cards",
+                        "AVStruct": {
+                            "type": "CANON_XF",
+                            "path": "C%3A%2FCards%2FCONTENTS%2F"
+                        },
+                        "count": 4
+                    },
+                    {
+                        "Date": "2020-03-14 16:31:48",
+                        "Name": "DELL",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CDELL"
+                        }
+                    },
+                    {
+                        "Date": "2020-11-16 15:15:30",
+                        "Name": "Downloads",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CDownloads"
+                        }
+                    },
+                    {
+                        "Date": "2020-03-14 16:01:03",
+                        "Name": "Drivers",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CDrivers"
+                        }
+                    },
+                    {
+                        "Date": "2020-11-01 09:49:41",
+                        "Name": "helm",
+                        "AVStruct": {
+                            "type": "MEDIA_FILES",
+                            "path": "C%3A%2Fhelm%2F%2F"
+                        },
+                        "count": 1
+                    },
+                    {
+                        "Date": "2020-06-23 15:54:29",
+                        "Name": "Intel",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CIntel"
+                        }
+                    },
+                    {
+                        "Date": "2019-12-07 10:14:52",
+                        "Name": "PerfLogs",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CPerfLogs"
+                        }
+                    },
+                    {
+                        "Date": "2021-01-06 17:06:16",
+                        "Name": "Program%20Files",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CProgram%20Files"
+                        }
+                    },
+                    {
+                        "Date": "2020-12-21 22:16:01",
+                        "Name": "Program%20Files%20(x86)",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CProgram%20Files%20(x86)"
+                        }
+                    },
+                    {
+                        "Date": "2020-05-13 09:57:22",
+                        "Name": "Python27",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CPython27"
+                        }
+                    },
+                    {
+                        "Date": "2020-11-10 11:31:09",
+                        "Name": "tmp",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5Ctmp"
+                        }
+                    },
+                    {
+                        "Date": "2020-11-23 10:26:31",
+                        "Name": "Users",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CUsers"
+                        }
+                    },
+                    {
+                        "Date": "2021-01-05 09:30:24",
+                        "Name": "Windows",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CWindows"
+                        }
+                    },
+                    {
+                        "Date": "2020-11-23 09:59:37",
+                        "Name": "WoodyTempFolder",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CWoodyTempFolder"
+                        }
+                    }
+                ],
+                "Files": [
+                    {
+                        "Date": "2020-12-22 21:27:32",
+                        "Name": "The.Nest.2020.FRENCH.720p.WEB.x264-Wawacity.vip.mkv",
+                        "AVType": "video"
+                    },
+                    {
+                        "Date": "2021-01-06 13:28:23",
+                        "Name": "The.Sweetheart.2018.FRENCH.720p.WEB.x264-Wawacity.vip.mkv",
+                        "AVType": "video"
+                    },
+                    {
+                        "Date": "2020-12-23 18:26:01",
+                        "Name": "The.Witches.2020.FRENCH.720p.BluRay.x264.AC3-Wawacity.vip.mkv",
+                        "AVType": "video"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "Apps",
+            "directory": {
+                "SubFolders": [
+                    {
+                        "Date": "2020-11-23 09:59:37",
+                        "Name": "WoodyTempFolder",
+                        "AVStruct": {
+                            "type": "NONE",
+                            "path": "C%3A%5CWoodyTempFolder"
+                        }
+                    }
+                ],
+                "Files": [
+                    {
+                        "Date": "2020-12-22 21:27:32",
+                        "Name": "The.Nest.2020.FRENCH.720p.WEB.x264-Wawacity.vip.mkv",
+                        "AVType": "video"
+                    }
+                ]
+            }
+        }
+    ]
+}
