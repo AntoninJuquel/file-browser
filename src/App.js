@@ -1,11 +1,10 @@
 import './App.css';
-import MyFileBrowser from './components/MyFileBrowser';
-
+import Browser from './components/Browser';
 
 export default function App() {
   return (
     <div style={{ height: 700 }}>
-      <MyFileBrowser />
+      <Browser mode="folder" openSelection="" connectors={[{id: "12345", config: {}}]} />
     </div>
   );
 }

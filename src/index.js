@@ -7,9 +7,9 @@ import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 
 const iconsMap = {
-  "floppyDisk": '💾',
-  "CANON_XF": '💾',
-  "MEDIA_FILES" : '💾'
+  "floppyDisk": '📁💾',
+  "CANON_XF": '📁💾',
+  "MEDIA_FILES" : '📁💾'
 };
 
 const CustomIcons = React.memo((props) => {
