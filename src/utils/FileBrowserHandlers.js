@@ -1,86 +1,140 @@
-function parseFile(file, index, isDir) {
-    let type = isDir ? file.AVStruct.type : file.AVType
+function deserializeFile(directoryId, file, isDir) {
+    const { type, path } = isDir ? file.AVStruct : { type: file.AVType, path: [...directoryId, "/"].join("/") + file.Name }
     return {
-        id: index + 1,
+        id: unescape(path).replaceAll("\\", "/").split("/").filter(dir => dir !== ""),
         name: unescape(file.Name),
         isDir,
         modDate: file.Date,
         childrenCount: isDir && (file.count === undefined ? 0 : file.count),
-        path: isDir && unescape(file.AVStruct.path).replace("\\", "/").split("/"),
-        type: type,
+        type,
         icon: { isDir, type },
-        customData: ["Ici une info supplémentaire de type string", { info: "sous de type objet" }]
     }
 }
+function serializeFiles(files) {
+    let SubFolders = []
+    let Files = []
 
-function handleJsonBrowser(jsonBrowser) {
+    files.length > 1 &&
+        files.forEach(file => {
+            if (file.isDir) {
+                SubFolders.push({
+                    Date: file.modDate,
+                    Name: escape(file.name),
+                    AVStruct: {
+                        type: file.type,
+                        path: escape(file.id.join("\\"))
+                    }
+                })
+            } else {
+                Files.push({
+                    Date: file.modDate,
+                    Name: escape(file.name),
+                    AVType: file.type
+                })
+            }
+        })
+
+    return JSON.stringify({
+        browse: {
+            SubFolders,
+            Files
+        }
+    })
+}
+
+function getFiles(directoryId, jsonFiles) {
     let files = []
-
-    jsonBrowser.SubFolders.forEach((folder, index) => {
-        files.push(parseFile(folder, index, true))
+    jsonFiles.SubFolders && jsonFiles.SubFolders.forEach(folder => {
+        files.push(deserializeFile(directoryId, folder, true))
     })
-    jsonBrowser.Files.forEach(file => {
-        files.push(parseFile(file, files.length, false))
+    jsonFiles.Files && jsonFiles.Files.forEach(file => {
+        files.push(deserializeFile(directoryId, file, false))
     })
-
-    let folderChain = []
-    files[0].path.slice(0, files[0].path.indexOf(files[0].name)).forEach(folder => folderChain.push(parseFile(
-        {
-            Name: folder,
-            AVStruct: { path: folder }
-        },
-        files.length,
-        true
-    )))
-    return { files, folderChain }
+    return files
 }
 
 export function handleOpenFiles(params) {
     const { data, setFiles, folderChain, setFolderChain } = params
     let selectedFile = data.payload.files[0]
 
-    fetch("http://localhost:3000/directories/" + selectedFile.name)
-        .then(res => res.json())
-        .then(result => {
-            const { files } = handleJsonBrowser(result.directory)
-            setFiles(files)
-        })
-        .catch(console.log)
+    console.log(selectedFile)
 
-    if (!selectedFile.isDir) {
-        console.log("OPEN FILE API type of " + selectedFile.type)
-        return
-    } else if (selectedFile.type !== "NONE") {
-        console.log(selectedFile.type)
+    if (selectedFile.type !== "NONE" && selectedFile.type !== undefined) {
+        console.log("Folder", selectedFile.id, selectedFile.type)
+        return;
+    } else if (!selectedFile.isDir) {
+        console.log("File", selectedFile.id, selectedFile.type)
+        return;
+    } else {
+        setFolderChain([null])
+        setFiles([null])
+        fetch("http://localhost:3001/directories/" + selectedFile.id)
+            .then(res => res.json())
+            .then(result => {
+                let newFolderChain = folderChain.includes(selectedFile) ?
+                    folderChain.slice(0, folderChain.indexOf(selectedFile) + 1) :
+                    [...folderChain, selectedFile]
+                setFolderChain(newFolderChain.filter(folder => folder !== null))
+                setFiles(getFiles(result.id, result.browse))
+            })
+            .catch(console.log)
     }
-    let newFolderChain = []
-    if (folderChain.includes(selectedFile))
-        newFolderChain = folderChain.slice(0, folderChain.indexOf(selectedFile) + 1)
-    else
-        newFolderChain = [...folderChain, selectedFile]
-
-    setFolderChain(newFolderChain)
-    //setFiles(handleJsonBrowser(JSONCALLAPI).files)console.log(data)
 }
 
 export function handleDeleteFiles(params) {
-    const { data, files, setFiles } = params
-    setFiles(files.filter(file => !data.state.selectedFiles.includes(file)))
+    const { data, files, setFiles, folderChain } = params
+    let newFiles = files.filter(file => !data.state.selectedFiles.includes(file))
+    fetch("http://localhost:3001/directories/" + folderChain[folderChain.length - 1].id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: serializeFiles([...newFiles])
+    })
+        .catch(console.log)
+    data.state.selectedFiles.forEach(file => fetch("http://localhost:3001/directories/" + file.id, {
+        method: "DELETE"
+    })
+        .catch(console.log))
+
+    setFiles(newFiles)
 }
 
 export function handleCreateFolder(params) {
     const { files, setFiles, folderChain } = params
     let Name = prompt("Enter folder name")
-    let newFile = parseFile(
+    let newFile = deserializeFile(
+        folderChain[folderChain.length - 1].id,
         {
             Name,
             Date: new Date().toLocaleDateString().split("/").reverse().join("-") + " " + new Date().toLocaleTimeString(),
-            AVStruct: { path: folderChain[0].name + "/" + Name }
+            AVStruct: { path: folderChain[folderChain.length - 1].id + "/" + Name, type: prompt("Folder type") },
         },
-        files.length,
         true,
     )
-    setFiles([...files, newFile])
+    fetch("http://localhost:3001/directories/" + folderChain[folderChain.length - 1].id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: serializeFiles([...files, newFile])
+    })
+        .then(result => {
+            setFiles([...files, newFile])
+        })
+        .catch(console.log)
+    fetch("http://localhost:3001/directories/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: unescape(folderChain[folderChain.length - 1].id + "\\" + Name).split("\\"), browse: { SubFolders: [], Files: [] } })
+    })
+        .catch(console.log)
+}
+
+export function handleMoveFolder(params) {
+    
 }
 
 export function handleScanFolder(params) {

@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react";
 import { FullFileBrowser, ChonkyActions, defineFileAction } from "chonky";
 
-import { handleCreateFolder, handleDeleteFiles, handleOpenFiles, handleScanFolder } from "../utils/FileBrowserHandlers";
+import { handleMoveFolder, handleCreateFolder, handleDeleteFiles, handleOpenFiles, handleScanFolder } from "../utils/FileBrowserHandlers";
 
 import CustomButtons from "./CustomButtons";
 
 export default function MyFileBrowser() {
+    const [browsing, setBrowsing] = useState(false)
     const [files, setFiles] = useState([null])
     const [folderChain, setFolderChain] = useState([null])
 
@@ -58,22 +59,29 @@ export default function MyFileBrowser() {
     const fileBrowserRef = useRef(null)
     return (
         <>
-            <button onClick={() => handleOpenFiles({
-                data: { payload: { files: [{ name: "c" }] } },
-                setFiles,
-                folderChain,
-                setFolderChain
-            })}>
-                Browse files
+            {browsing ?
+                <FullFileBrowser
+                    folderChain={folderChain}
+                    files={files}
+                    onFileAction={onFileAction}
+                    fileActions={fileActions}
+                    defaultFileViewActionId="enable_list_view"
+                    ref={fileBrowserRef}
+                />
+                :
+                <button onClick={() => {
+                    setBrowsing(true)
+                    handleOpenFiles({
+                        data: { payload: { files: [{ id: ["C:"], name: "C", isDir: true, type: "NONE" }] } },
+                        setFiles,
+                        folderChain,
+                        setFolderChain
+                    })
+                }}>
+                    Browse files
             </button>
-            <FullFileBrowser
-                folderChain={folderChain}
-                files={files}
-                onFileAction={onFileAction}
-                fileActions={fileActions}
-                defaultFileViewActionId="enable_list_view"
-                ref={fileBrowserRef}
-            />
+
+            }
         </>
     )
 }
