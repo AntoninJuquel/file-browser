@@ -11,11 +11,18 @@ export default function Browser({ mode, openSelection, connectors }) {
     const modeMap = {
         "folder": {
             fileActions: [scan, cancel],
-            onFileAction: () => {
+            onFileAction: (data) => {
                 switch (data.id) {
                     case scan.id:
+                        handleOpenFiles({
+                            data: { payload: { files: [{ id: ["C:"], name: "C", isDir: true, type: "NONE" }] } },
+                            setFiles,
+                            folderChain,
+                            setFolderChain
+                        })
                         break;
                     case cancel.id:
+                        console.log("cancel")
                         break;
                     default:
                         break;
@@ -44,16 +51,9 @@ export default function Browser({ mode, openSelection, connectors }) {
                 handleDeleteFiles(handler)
                 break;
             case scan.id:
-                handleScanFolder(handler);
-                handleOpenFiles({
-                    data: { payload: { files: [{ id: ["C:"], name: "C", isDir: true, type: "NONE" }] } },
-                    setFiles,
-                    folderChain,
-                    setFolderChain
-                })
+                handleScanFolder(handler)
                 break;
             case cancel.id:
-                console.log("cancel")
                 break;
             default:
                 break;
