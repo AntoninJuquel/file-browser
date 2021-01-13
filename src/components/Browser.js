@@ -9,6 +9,15 @@ export default function Browser({ mode, openSelection, connectors }) {
     const [files, setFiles] = useState([null])
     const [folderChain, setFolderChain] = useState([null])
 
+    useEffect(() => {
+        handleOpenFiles({
+            data: { payload: { files: [{ id: ["C:"], name: "C", isDir: true, type: "NONE" }] } },
+            setFiles,
+            folderChain,
+            setFolderChain
+        })
+    }, [])
+
     function onFileAction(data) {
         const handler = { data, files, setFiles, folderChain, setFolderChain, ChonkyActions }
         //console.log(handler)
@@ -60,12 +69,7 @@ export default function Browser({ mode, openSelection, connectors }) {
             onFileAction: (data) => {
                 switch (data.id) {
                     case scan.id:
-                        handleOpenFiles({
-                            data: { payload: { files: [{ id: ["C:"], name: "C", isDir: true, type: "NONE" }] } },
-                            setFiles,
-                            folderChain,
-                            setFolderChain
-                        })
+                        console.log("scan")
                         break;
                     case cancel.id:
                         console.log("cancel")
