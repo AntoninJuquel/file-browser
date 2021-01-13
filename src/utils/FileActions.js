@@ -1,23 +1,31 @@
-import { defineFileAction } from "chonky";
+import { ChonkyActions, defineFileAction } from "chonky";
+
+ChonkyActions.OpenSelection.button.group = ""
+ChonkyActions.OpenSelection.button.icon = ""
 
 export const scan = defineFileAction({
     id: "scan",
     button: {
-        name: "Scan",
+        name: "SCAN",
         toolbar: true,
-        contextMenu: true,
         tooltip: "Scan the directory",
-        icon: "search"
     },
 });
 
 export const cancel = defineFileAction({
     id: "cancel",
     button: {
-        name: "Cancel",
+        name: "CANCEL",
         toolbar: true,
-        contextMenu: true,
-        tooltip: "Cancel",
-        icon: "close"
+        tooltip: "Cancel browsing",
     },
 })
+
+export const selectFolder = defineFileAction({
+    id: "select_folder",
+    button: {
+        name: "SELECT FOLDER",
+        toolbar: true,
+        tooltip: "Select the directory",
+    },
+});

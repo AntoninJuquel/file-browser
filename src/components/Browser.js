@@ -1,15 +1,61 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FullFileBrowser, ChonkyActions } from "chonky";
 
-import { handleMoveFolder, handleCreateFolder, handleDeleteFiles, handleOpenFiles, handleScanFolder } from "../utils/BrowserHandlers";
-import { scan, cancel } from "../utils/FileActions";
+import { CustomIcons } from "../utils/IconsHandler";
+import { handleMoveFolder, handleCreateFolder, handleDeleteFiles, handleOpenFiles } from "../utils/ActionsHandler";
+import { scan, cancel, selectFolder } from "../utils/FileActions";
 
 export default function Browser({ mode, openSelection, connectors }) {
     const [files, setFiles] = useState([null])
     const [folderChain, setFolderChain] = useState([null])
 
+    function onFileAction(data) {
+        const handler = { data, files, setFiles, folderChain, setFolderChain, ChonkyActions }
+        //console.log(handler)
+        switch (data.id) {
+            case ChonkyActions.CreateFolder.id:
+                handleCreateFolder(handler)
+                break;
+            case ChonkyActions.DeleteFiles.id:
+                handleDeleteFiles(handler)
+                break;
+            default:
+                break;
+        }
+    }
+
     const modeMap = {
         "folder": {
+            fileActions: [selectFolder, ChonkyActions.OpenSelection],
+            onFileAction: (data) => {
+                const handler = { data, files, setFiles, folderChain, setFolderChain, ChonkyActions }
+                switch (data.id) {
+                    case selectFolder.id:
+                        console.log("select folder")
+                        break;
+                    case ChonkyActions.OpenFiles.id:
+                        handleOpenFiles(handler)
+                        break;
+                    default:
+                        onFileAction(data)
+                        break;
+                }
+            }
+        },
+        "file": {
+            fileActions: [ChonkyActions.OpenSelection],
+            onFileAction: (data) => {
+                switch (data.id) {
+                    case ChonkyActions.OpenFiles.id:
+                        openSelection()
+                        break;
+                    default:
+                        onFileAction(data)
+                        break;
+                }
+            }
+        },
+        "card": {
             fileActions: [scan, cancel],
             onFileAction: (data) => {
                 switch (data.id) {
@@ -24,39 +70,14 @@ export default function Browser({ mode, openSelection, connectors }) {
                     case cancel.id:
                         console.log("cancel")
                         break;
+                    case ChonkyActions.OpenFiles.id:
+                        openSelection()
+                        break;
                     default:
+                        onFileAction(data)
                         break;
                 }
             }
-        },
-        "file": {
-            fileActions: []
-        },
-        "card": {
-            fileActions: []
-        }
-    }
-
-    function onFileAction(data) {
-        const handler = { data, files, setFiles, folderChain, setFolderChain, ChonkyActions }
-        //console.log(handler)
-        switch (data.id) {
-            case ChonkyActions.OpenFiles.id:
-                handleOpenFiles(handler)
-                break;
-            case ChonkyActions.CreateFolder.id:
-                handleCreateFolder(handler)
-                break;
-            case ChonkyActions.DeleteFiles.id:
-                handleDeleteFiles(handler)
-                break;
-            case scan.id:
-                handleScanFolder(handler)
-                break;
-            case cancel.id:
-                break;
-            default:
-                break;
         }
     }
 
@@ -66,9 +87,11 @@ export default function Browser({ mode, openSelection, connectors }) {
             folderChain={folderChain}
             files={files}
             onFileAction={modeMap[mode].onFileAction}
-            fileActions={modeMap[mode].fileActions}
+            fileActions={[...modeMap[mode].fileActions, ChonkyActions.EnableListView, ChonkyActions.EnableGridView]}
             defaultFileViewActionId="enable_list_view"
             ref={fileBrowserRef}
+            disableDefaultFileActions={true}
+            iconComponent={CustomIcons}
         />
     )
 }
