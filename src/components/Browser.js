@@ -77,6 +77,9 @@ export default function Browser({ mode, openSelection, connectors }) {
                     case ChonkyActions.OpenFiles.id:
                         openSelection()
                         break;
+                    case ChonkyActions.MouseClickFile.id:
+                        fileBrowserRef.current.setFileSelection(new Set([data.payload.file.id]))
+                        break;
                     default:
                         onFileAction(data)
                         break;
