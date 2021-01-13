@@ -4,7 +4,11 @@ import { ChonkyIconFA } from "chonky-icon-fontawesome";
 const iconsMap = {
     "floppyDisk": '📁💾',
     "CANON_XF": '📁💾',
-    "MEDIA_FILES": '📁💾'
+    "MEDIA_FILES": '📁💾',
+    "folder": '📁',
+    "media": '💾',
+    "root": '🖥️',
+    "disk": '🖴'
 };
 
 export const CustomIcons = memo((props) => {

@@ -4,28 +4,19 @@ export function handleOpenFiles(params) {
     const { data, setFiles, folderChain, setFolderChain } = params
     let selectedFile = data.payload.files[0]
 
-    console.log(selectedFile)
+    setFolderChain([null])
+    setFiles([null])
+    fetch("http://localhost:3001/directories/" + selectedFile.id)
+        .then(res => res.json())
+        .then(result => {
+            let newFolderChain = folderChain.includes(selectedFile) ?
+                folderChain.slice(0, folderChain.indexOf(selectedFile) + 1) :
+                [...folderChain, selectedFile]
+            setFolderChain(newFolderChain.filter(folder => folder !== null))
+            setFiles(deserializeFiles(selectedFile.id, result.browse))
+        })
+        .catch(console.log)
 
-    if (selectedFile.type !== "NONE" && selectedFile.type !== undefined) {
-        console.log("Folder", selectedFile.id, selectedFile.type)
-        return;
-    } else if (!selectedFile.isDir) {
-        console.log("File", selectedFile.id, selectedFile.type)
-        return;
-    } else {
-        setFolderChain([null])
-        setFiles([null])
-        fetch("http://localhost:3001/directories/" + selectedFile.id)
-            .then(res => res.json())
-            .then(result => {
-                let newFolderChain = folderChain.includes(selectedFile) ?
-                    folderChain.slice(0, folderChain.indexOf(selectedFile) + 1) :
-                    [...folderChain, selectedFile]
-                setFolderChain(newFolderChain.filter(folder => folder !== null))
-                setFiles(deserializeFiles(selectedFile.id, result.browse))
-            })
-            .catch(console.log)
-    }
 }
 
 export function handleCreateFolder(params) {
@@ -33,7 +24,7 @@ export function handleCreateFolder(params) {
 
     let Name = prompt("File name")
     let path = [...folderChain[folderChain.length - 1].id, Name]
-    
+
     //#region TO DO
     let newFolder =
     {

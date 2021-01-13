@@ -1,5 +1,6 @@
 import { ChonkyActions, defineFileAction } from "chonky";
 
+ChonkyActions.OpenSelection.button.name = "Open"
 ChonkyActions.OpenSelection.button.group = ""
 ChonkyActions.OpenSelection.button.icon = ""
 
