@@ -22,6 +22,9 @@ export default function Browser({ mode, openSelection, connectors }) {
         const handler = { data, files, setFiles, folderChain, setFolderChain, ChonkyActions }
         //console.log(handler)
         switch (data.id) {
+            case ChonkyActions.OpenFiles.id:
+                handleOpenFiles(handler)
+                break;
             case ChonkyActions.CreateFolder.id:
                 handleCreateFolder(handler)
                 break;
@@ -37,68 +40,51 @@ export default function Browser({ mode, openSelection, connectors }) {
         "folder": {
             fileActions: [selectFolder, ChonkyActions.OpenSelection],
             onFileAction: (data) => {
-                const handler = { data, files, setFiles, folderChain, setFolderChain, ChonkyActions }
-                switch (data.id) {
-                    case selectFolder.id:
-                        console.log("select folder")
-                        break;
-                    case ChonkyActions.OpenFiles.id:
-                        handleOpenFiles(handler)
-                        break;
-                    default:
-                        onFileAction(data)
-                        break;
-                }
+                if (data.id === selectFolder.id)
+                    openSelection(data)
+                else
+                    onFileAction(data)
             }
         },
         "file": {
             fileActions: [ChonkyActions.OpenSelection],
             onFileAction: (data) => {
-                switch (data.id) {
-                    case ChonkyActions.OpenFiles.id:
-                        openSelection()
-                        break;
-                    default:
-                        onFileAction(data)
-                        break;
-                }
+                if (data.id === ChonkyActions.OpenFiles.id && !data.payload.targetFile.isDir)
+                    openSelection({ folders: data.payload.files, list: folderChain[folderChain.length - 1].id, path: folderChain[folderChain.length - 1].id.join("\\") })
+                else
+                    onFileAction(data)
             }
         },
         "card": {
             fileActions: [scan, cancel],
             onFileAction: (data) => {
-                switch (data.id) {
-                    case scan.id:
-                        console.log("scan")
-                        break;
-                    case cancel.id:
-                        console.log("cancel")
-                        break;
-                    case ChonkyActions.OpenFiles.id:
-                        openSelection()
-                        break;
-                    case ChonkyActions.MouseClickFile.id:
-                        fileBrowserRef.current.setFileSelection(new Set([data.payload.file.id]))
-                        break;
-                    default:
-                        onFileAction(data)
-                        break;
-                }
+                if (data.id === scan.id)
+                    console.log("scan")
+                else if (data.id === cancel.id)
+                    console.log("cancel")
+                else if (data.id === ChonkyActions.OpenFiles.id && data.payload.targetFile.childrenCount !== undefined)
+                    openSelection({ folders: data.payload.files, list: folderChain[folderChain.length - 1].id, path: folderChain[folderChain.length - 1].id.join("\\") })
+                else if (data.id === ChonkyActions.MouseClickFile.id)
+                    fileBrowserRef.current.setFileSelection(new Set([data.payload.file.id]))
+                else
+                    onFileAction(data)
             }
         }
     }
 
     const fileBrowserRef = useRef(null)
     return (
-        <FullFileBrowser
-            folderChain={folderChain}
-            files={files}
-            onFileAction={modeMap[mode].onFileAction}
-            fileActions={[...modeMap[mode].fileActions, ChonkyActions.EnableListView, ChonkyActions.EnableGridView]}
-            defaultFileViewActionId="enable_list_view"
-            ref={fileBrowserRef}
-            disableDefaultFileActions={true}
-            iconComponent={CustomIcons}
-        />
+        <div style={{ height: 700 }}>
+            <FullFileBrowser
+                folderChain={folderChain}
+                files={files}
+                onFileAction={modeMap[mode].onFileAction}
+                fileActions={[...modeMap[mode].fileActions, ChonkyActions.EnableListView, ChonkyActions.EnableGridView]}
+                defaultFileViewActionId="enable_list_view"
+                ref={fileBrowserRef}
+                disableDefaultFileActions={true}
+                iconComponent={CustomIcons}
+            />
+        </div>
     )
 }

@@ -16,7 +16,6 @@ export function handleOpenFiles(params) {
             setFiles(deserializeFiles(selectedFile.id, result.browse))
         })
         .catch(console.log)
-
 }
 
 export function handleCreateFolder(params) {
