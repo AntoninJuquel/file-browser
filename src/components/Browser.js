@@ -1,23 +1,26 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FullFileBrowser, ChonkyActions } from "chonky";
+import { Rnd } from "react-rnd";
 
 
 import { CustomIcons } from "../utils/IconsHandler";
-import { handleMoveFolder, handleCreateFolder, handleDeleteFiles, handleOpenFiles } from "../utils/ActionsHandler";
+import { handleOpenFiles } from "../utils/ActionsHandler";
 import { scan, cancel, selectFolder } from "../utils/FileActions";
-import { Rnd } from "react-rnd";
+import CustomButtons from "./CustomButtons";
 
-export default function Browser({ mode, openSelection, connectors }) {
+export default function Browser({ mode, openSelection, connectors, dimension = { x, y, width, height }, style, darkMode }) {
     const [files, setFiles] = useState([null])
     const [folderChain, setFolderChain] = useState([null])
 
     useEffect(() => {
-        handleOpenFiles({
-            data: { payload: { files: [{ id: ["C:"], name: "C", isDir: true, type: "NONE" }] } },
-            setFiles,
-            folderChain,
-            setFolderChain
-        })
+        fetch("http://localhost:3001/listDrives")
+            .then(res => res.json())
+            .then(result => {
+                result.forEach(r => r.name = unescape(r.name))
+                setFiles(result)
+                setFolderChain([{ name: "root", id: "root" }])
+            })
+            .catch(console.log)
     }, [])
 
     function onFileAction(data) {
@@ -26,12 +29,6 @@ export default function Browser({ mode, openSelection, connectors }) {
         switch (data.id) {
             case ChonkyActions.OpenFiles.id:
                 handleOpenFiles(handler)
-                break;
-            case ChonkyActions.CreateFolder.id:
-                handleCreateFolder(handler)
-                break;
-            case ChonkyActions.DeleteFiles.id:
-                handleDeleteFiles(handler)
                 break;
             default:
                 break;
@@ -78,12 +75,13 @@ export default function Browser({ mode, openSelection, connectors }) {
     return (
         <Rnd
             dragHandleClassName="handler"
-            style={{ flex: 1, flexDirection: "column", display: "flex", backgroundColor: "pink", border: "solid 1px #ddd" }}
-            default={{ width: 700, height: 700, x: 0, y: 0 }}
-            minHeight={500}
+            style={{ flex: 1, flexDirection: "column", display: "flex" }}
+            default={dimension}
+            minWidth={600} minHeight={500}
+            //disableDragging={true}
         >
             <div className="handler" style={{ height: 25, width: "100%", backgroundColor: "black" }}></div>
-            <div style={{ flexGrow: 1 }}>
+            <div style={{ flexGrow: 1, backgroundColor: "black" }}>
                 <FullFileBrowser
                     folderChain={folderChain}
                     files={files}
@@ -93,9 +91,10 @@ export default function Browser({ mode, openSelection, connectors }) {
                     ref={fileBrowserRef}
                     disableDefaultFileActions={true}
                     iconComponent={CustomIcons}
-                    darkMode={true}
+                    darkMode={darkMode}
                 />
             </div>
+            <CustomButtons files={files} fileBrowserRef={fileBrowserRef} />
         </Rnd>
     )
 }

@@ -13,7 +13,16 @@ export default function App() {
   return (
     <>
       {modes.map(m => <button key={m} disabled={mode === m} onClick={() => setMode(m)}>{m}</button>)}
-      {mode !== "" && <Browser mode={mode} openSelection={modAction} connectors={[{ id: "12345", config: {} }]} />}
+      {
+        mode !== "" &&
+        <Browser
+          mode={mode}
+          openSelection={modAction}
+          connectors={[]}
+          dimension={{x: 0, y:0, width: 600,height: 500}}
+          darkMode={false}
+        />
+      }
     </>
   );
 }

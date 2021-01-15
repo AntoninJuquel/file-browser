@@ -1,0 +1,74 @@
+{
+  "listDrives": [
+    {
+      "name": "Desktop",
+      "id": "C:,Users,Emmanuel KOUTOUAN,Desktop",
+      "icon": "folder",
+      "type": "folder",
+      "connectorId": "defaultSMB",
+      "attributes": {
+        "availableSpace": 42382835712,
+        "freeSpace": 42382835712,
+        "totalSize": 510745636864
+      }
+    },
+    {
+      "name": "Documents",
+      "id": "C:,Users,Emmanuel KOUTOUAN,Documents",
+      "icon": "folder",
+      "type": "folder",
+      "connectorId": "defaultSMB"
+    },
+    {
+      "name": "OS%20%20(C%3A)",
+      "id": "C:",
+      "icon": "folder",
+      "type": "localDrive",
+      "connectorId": "defaultSMB"
+    },
+    {
+      "name": "monShare",
+      "id": "\\\\monShare",
+      "icon": "folder",
+      "type": "smb",
+      "connectorId": "defaultSMB"
+    }
+  ],
+  "browse": [
+    {
+      "id": "C:",
+      "items": [
+        {
+          "name": "Cards",
+          "id": "C:,Cards",
+          "icon": "CANON_XF",
+          "type": "card",
+          "attributes": {
+            "date": "2020-12-15 14:56:34",
+            "count": 4
+          }
+        },
+        {
+          "name": "WINDOWS.~BT",
+          "id": "C:,WINDOWS.~BT",
+          "icon": "folder",
+          "type": "folder",
+          "attributes": {
+            "date": "2020-12-15 14:56:34",
+            "count": 4
+          }
+        },
+        {
+          "name": "The.Nest.2020.FRENCH.720p.WEB.x264-Wawacity.vip.mkv",
+          "id": "C:,The.Nest.2020.FRENCH.720p.WEB.x264-Wawacity.vip.mkv",
+          "icon": "video",
+          "type": "file",
+          "attributes": {
+            "date": "2020-12-15 14:56:34",
+            "size": 4
+          }
+        }
+      ]
+    }
+  ]
+}

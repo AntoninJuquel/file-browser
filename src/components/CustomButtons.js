@@ -23,7 +23,7 @@ export default function CustomButtons({ fileBrowserRef, files }) {
         fileBrowserRef.current.requestFileAction(ChonkyActions.ClearSelection)
     }
     return (
-        <div>
+        <div style={{ backgroundColor: "black" }}>
             <button onClick={selectRandomFiles}>
                 Select random files
             </button>

@@ -5,7 +5,7 @@ const iconsMap = {
     "root": '🖥️',
     "disk": '🖴',
     "folder": '📁',
-    "card": '💾',
+    "CANON_XF": '💾',
 };
 
 export const CustomIcons = memo((props) => {
