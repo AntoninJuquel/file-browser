@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FullFileBrowser, ChonkyActions } from "chonky";
 
+
 import { CustomIcons } from "../utils/IconsHandler";
 import { handleMoveFolder, handleCreateFolder, handleDeleteFiles, handleOpenFiles } from "../utils/ActionsHandler";
 import { scan, cancel, selectFolder } from "../utils/FileActions";
+import { Rnd } from "react-rnd";
 
 export default function Browser({ mode, openSelection, connectors }) {
     const [files, setFiles] = useState([null])
@@ -74,17 +76,26 @@ export default function Browser({ mode, openSelection, connectors }) {
 
     const fileBrowserRef = useRef(null)
     return (
-        <div style={{ height: 700 }}>
-            <FullFileBrowser
-                folderChain={folderChain}
-                files={files}
-                onFileAction={modeMap[mode].onFileAction}
-                fileActions={[...modeMap[mode].fileActions, ChonkyActions.EnableListView, ChonkyActions.EnableGridView]}
-                defaultFileViewActionId="enable_list_view"
-                ref={fileBrowserRef}
-                disableDefaultFileActions={true}
-                iconComponent={CustomIcons}
-            />
-        </div>
+        <Rnd
+            dragHandleClassName="handler"
+            style={{ flex: 1, flexDirection: "column", display: "flex", backgroundColor: "pink", border: "solid 1px #ddd" }}
+            default={{ width: 700, height: 700, x: 0, y: 0 }}
+            minHeight={500}
+        >
+            <div className="handler" style={{ height: 25, width: "100%", backgroundColor: "black" }}></div>
+            <div style={{ flexGrow: 1 }}>
+                <FullFileBrowser
+                    folderChain={folderChain}
+                    files={files}
+                    onFileAction={modeMap[mode].onFileAction}
+                    fileActions={[...modeMap[mode].fileActions, ChonkyActions.EnableListView, ChonkyActions.EnableGridView]}
+                    defaultFileViewActionId="enable_list_view"
+                    ref={fileBrowserRef}
+                    disableDefaultFileActions={true}
+                    iconComponent={CustomIcons}
+                    darkMode={true}
+                />
+            </div>
+        </Rnd>
     )
 }
