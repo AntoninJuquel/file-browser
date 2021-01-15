@@ -8,7 +8,7 @@ import { handleOpenFiles } from "../utils/ActionsHandler";
 import { scan, cancel, selectFolder } from "../utils/FileActions";
 import CustomButtons from "./CustomButtons";
 
-export default function Browser({ mode, openSelection, connectors, dimension = { x, y, width, height }, style, darkMode }) {
+export default function Browser({ mode, openSelection, connectors, style, darkMode }) {
     const [files, setFiles] = useState([null])
     const [folderChain, setFolderChain] = useState([null])
 
@@ -74,27 +74,29 @@ export default function Browser({ mode, openSelection, connectors, dimension = {
     const fileBrowserRef = useRef(null)
     return (
         <Rnd
-            dragHandleClassName="handler"
             style={{ flex: 1, flexDirection: "column", display: "flex" }}
-            default={dimension}
+            default={{ x: 0, y: 0, width: 600, height: 500 }}
             minWidth={600} minHeight={500}
-            //disableDragging={true}
+            dragHandleClassName="handler"
+            cancel=".nodrag"
+            bounds="window"
         >
-            <div className="handler" style={{ height: 25, width: "100%", backgroundColor: "black" }}></div>
-            <div style={{ flexGrow: 1, backgroundColor: "black" }}>
-                <FullFileBrowser
-                    folderChain={folderChain}
-                    files={files}
-                    onFileAction={modeMap[mode].onFileAction}
-                    fileActions={[...modeMap[mode].fileActions, ChonkyActions.EnableListView, ChonkyActions.EnableGridView]}
-                    defaultFileViewActionId="enable_list_view"
-                    ref={fileBrowserRef}
-                    disableDefaultFileActions={true}
-                    iconComponent={CustomIcons}
-                    darkMode={darkMode}
-                />
+            <div className="handler" style={{ display: "flex", flex: 1, flexGrow: 1, flexDirection: "column", backgroundColor: "black", padding: 25, borderRadius: 5 }}>
+                <div className="nodrag" style={{ flex: 1 }} >
+                    <FullFileBrowser
+                        folderChain={folderChain}
+                        files={files}
+                        onFileAction={modeMap[mode].onFileAction}
+                        fileActions={[...modeMap[mode].fileActions, ChonkyActions.EnableListView, ChonkyActions.EnableGridView]}
+                        defaultFileViewActionId="enable_list_view"
+                        ref={fileBrowserRef}
+                        disableDefaultFileActions={true}
+                        iconComponent={CustomIcons}
+                        darkMode={darkMode}
+                    />
+                </div>
+                <CustomButtons files={files} fileBrowserRef={fileBrowserRef} />
             </div>
-            <CustomButtons files={files} fileBrowserRef={fileBrowserRef} />
         </Rnd>
     )
 }

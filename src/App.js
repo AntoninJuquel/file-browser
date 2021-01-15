@@ -19,7 +19,6 @@ export default function App() {
           mode={mode}
           openSelection={modAction}
           connectors={[]}
-          dimension={{x: 0, y:0, width: 600,height: 500}}
           darkMode={false}
         />
       }

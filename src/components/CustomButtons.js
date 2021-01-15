@@ -24,13 +24,13 @@ export default function CustomButtons({ fileBrowserRef, files }) {
     }
     return (
         <div style={{ backgroundColor: "black" }}>
-            <button onClick={selectRandomFiles}>
+            <button className="nodrag" onClick={selectRandomFiles}>
                 Select random files
             </button>
-            <button onClick={invertSelection}>
+            <button className="nodrag" onClick={invertSelection}>
                 Invert selection
             </button>
-            <button onClick={clearSelection}>
+            <button className="nodrag" onClick={clearSelection}>
                 Clear selection
             </button>
         </div>
