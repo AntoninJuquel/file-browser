@@ -16,9 +16,12 @@ export default function Browser({ mode, openSelection, connectors, style, darkMo
         fetch("http://localhost:3001/listDrives")
             .then(res => res.json())
             .then(result => {
-                result.forEach(r => r.name = unescape(r.name))
+                result.forEach(r => {
+                    r.isDir = r.type !== "file"
+                    r.name = unescape(r.name)
+                })
                 setFiles(result)
-                setFolderChain([{ name: "root", id: "root" }])
+                setFolderChain([{ name: "root", id: "root", isDir : true }])
             })
             .catch(console.log)
     }, [])
@@ -49,7 +52,7 @@ export default function Browser({ mode, openSelection, connectors, style, darkMo
             fileActions: [ChonkyActions.OpenSelection],
             onFileAction: (data) => {
                 if (data.id === ChonkyActions.OpenFiles.id && !data.payload.targetFile.isDir)
-                    openSelection({ folders: data.payload.files, list: folderChain[folderChain.length - 1].id, path: folderChain[folderChain.length - 1].id.join("\\") })
+                    console.log(data)
                 else
                     onFileAction(data)
             }

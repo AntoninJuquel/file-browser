@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './App.css';
+import './ChonkyStyle.css';
 import Browser from './components/Browser';
 
 export default function App() {

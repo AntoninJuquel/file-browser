@@ -9,8 +9,12 @@ export function handleOpenFiles(params) {
             .then(res => res.json())
             .then(result => {
                 result.forEach(r => r.name = unescape(r.name))
+                result.forEach(r => {
+                    r.isDir = r.type !== "file"
+                    r.name = unescape(r.name)
+                })
                 setFiles(result)
-                setFolderChain([{ name: "root", id: "root" }])
+                setFolderChain([{ name: "root", id: "root", isDir: true }])
             })
             .catch(console.log)
     else
@@ -18,9 +22,13 @@ export function handleOpenFiles(params) {
             .then(res => res.json())
             .then(result => {
                 let newFolderChain = folderChain.includes(selectedFile) ?
-                    folderChain.slice(0, folderChain.indexOf(selectedFile) + 1) :
-                    [...folderChain, selectedFile]
+                folderChain.slice(0, folderChain.indexOf(selectedFile) + 1) :
+                [...folderChain, selectedFile]
                 setFolderChain(newFolderChain.filter(folder => folder !== null))
+                result.items.forEach(r => {
+                    r.isDir = r.type !== "file"
+                    r.name = unescape(r.name)
+                })
                 setFiles(result.items)
             })
             .catch(console.log)
