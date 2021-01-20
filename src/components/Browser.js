@@ -51,7 +51,7 @@ export default function Browser({ mode, openSelection, connectors, style, darkMo
         "file": {
             fileActions: [ChonkyActions.OpenSelection],
             onFileAction: (data) => {
-                if (data.id === ChonkyActions.OpenFiles.id && !data.payload.targetFile.isDir)
+                if (data.id === ChonkyActions.OpenFiles.id && !data.payload.files[0].isDir)
                     console.log(data)
                 else
                     onFileAction(data)
@@ -84,7 +84,10 @@ export default function Browser({ mode, openSelection, connectors, style, darkMo
             cancel=".nodrag"
             bounds="window"
         >
-            <div className="handler" style={{ display: "flex", flex: 1, flexGrow: 1, flexDirection: "column", backgroundColor: "black", padding: 25, borderRadius: 5 }}>
+            <div className="handler" style={{ display: "flex", flex: 1, flexGrow: 1, flexDirection: "column", backgroundColor: "black", padding: 10}}>
+                <div style={{display: "flex",backgroundColor: "#202020", color: "white", justifyContent: "center"}}>
+                    Open folder...
+                </div>
                 <div className="nodrag" style={{ flex: 1 }} >
                     <FullFileBrowser
                         folderChain={folderChain}

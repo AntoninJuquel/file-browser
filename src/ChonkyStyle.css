@@ -1,4 +1,8 @@
 .chonky-chonkyRoot{
+    background-color: #202020 !important;
+    border-radius: 0 !important;
+    border-width: 0 !important;
+    font-family: 'Open Sans', sans-serif !important;
 }
 .chonky-fileDragPreview{
 }
@@ -13,22 +17,28 @@
 .chonky-iconDropdown {
 }
 button.chonky-activeButton {
+    color: #E50071 !important;
 }
 
 /* Navbar */
 .chonky-navbarWrapper {
 }
-.chonky-navbarContainer {
+.chonky-navbarContainer .chonky-iconOnlyButton{
+    color: #E50071 !important;
 }
 .chonky-upDirectoryButton {
 }
 .chonky-navbarBreadcrumbs {
+    background-color:  #EEEEEE;
+    border-radius: 2px;
 }
 .chonky-separator {
 }
 
 /* Toolbar */
 .chonky-toolbarWrapper{
+    background-color: white !important;
+    padding: 10px !important;
 }
 .chonky-toolbarContainer{
 }
@@ -47,6 +57,7 @@ button.chonky-activeButton {
 .chonky-extraInfoSpan {
 }
 .chonky-selectionSizeText {
+    color: #E50071 !important;
 }
 
 /* Search field */
@@ -65,6 +76,8 @@ button.chonky-activeButton {
 .chonky-fileEntryClickableWrapper {
 }
 .chonky-fileListWrapper {
+    background-color: white !important;
+    padding: 10px !important;
 }
 
 /* Context menu */

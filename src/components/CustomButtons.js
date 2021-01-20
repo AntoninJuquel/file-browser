@@ -23,14 +23,14 @@ export default function CustomButtons({ fileBrowserRef, files }) {
         fileBrowserRef.current.requestFileAction(ChonkyActions.ClearSelection)
     }
     return (
-        <div style={{ backgroundColor: "black" }}>
-            <button className="nodrag" onClick={selectRandomFiles}>
+        <div style={{ display: "flex",backgroundColor: "#202020", justifyContent: "flex-end", paddingBottom: 10, paddingRight: 10 }}>
+            <button className="nodrag" onClick={selectRandomFiles} style={{backgroundColor: "black", color:  "white"}}>
                 Select random files
             </button>
-            <button className="nodrag" onClick={invertSelection}>
+            <button className="nodrag" onClick={invertSelection} style={{backgroundColor: "black", color:  "white"}}>
                 Invert selection
             </button>
-            <button className="nodrag" onClick={clearSelection}>
+            <button className="nodrag" onClick={clearSelection} style={{backgroundColor: "black", color:  "white"}}>
                 Clear selection
             </button>
         </div>
