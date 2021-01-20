@@ -8,7 +8,7 @@ import { handleOpenFiles } from "../utils/ActionsHandler";
 import { scan, cancel, selectFolder } from "../utils/FileActions";
 import FileActionsButtons from "./FileActionsButtons";
 
-import './ChonkyStyle.css';
+import "../styles/ChonkyStyle.css";
 import style from "./Browser.module.css";
 
 export default function Browser({ mode, openSelection, connectors }) {
