@@ -5,6 +5,10 @@ ChonkyActions.OpenSelection.button.group = ""
 ChonkyActions.OpenSelection.button.icon = ""
 ChonkyActions.OpenSelection.button.toolbar = false
 
+ChonkyActions.OpenFileContextMenu = defineFileAction({
+    id: "open_file_context_menu"
+})
+
 export const scan = defineFileAction({
     id: "scan",
     button: {

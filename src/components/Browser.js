@@ -10,10 +10,14 @@ import FileActionsButtons from "./FileActionsButtons";
 
 import "../styles/ChonkyStyle.css";
 import style from "./Browser.module.css";
+import ContextMenu from "./ContextMenu";
 
 export default function Browser({ mode, openSelection, connectors }) {
     const [files, setFiles] = useState([null])
     const [folderChain, setFolderChain] = useState([null])
+
+    const SortActions = [ChonkyActions.SortFilesByDate, ChonkyActions.SortFilesByName, ChonkyActions.SortFilesBySize]
+    const ViewActions = [ChonkyActions.EnableGridView, ChonkyActions.EnableListView]
 
     useEffect(() => {
         fetch("http://localhost:3001/listDrives")
@@ -32,11 +36,16 @@ export default function Browser({ mode, openSelection, connectors }) {
     function onFileAction(data) {
         const handler = { data, files, setFiles, folderChain, setFolderChain, ChonkyActions }
         //console.log(handler)
+        console.log(data)
         switch (data.id) {
             case ChonkyActions.OpenFiles.id:
                 handleOpenFiles(handler)
                 break;
+            case ChonkyActions.OpenFileContextMenu.id:
+                fileBrowserRef.current.setFileSelection(new Set([data.payload.triggerFileId]))
+                break;
             default:
+                console.log(data)
                 break;
         }
     }
@@ -77,34 +86,45 @@ export default function Browser({ mode, openSelection, connectors }) {
         }
     }
 
+    const [contextMenu, setContextMenu] = useState({ x: 0, y: 0 })
+
     const fileBrowserRef = useRef(null)
     return (
-        <Rnd
-            style={{ flex: 1, flexDirection: "column", display: "flex" }}
-            default={{ x: 0, y: 0, width: 600, height: 500 }}
-            minWidth={600} minHeight={500}
-            dragHandleClassName="handler"
-            cancel=".nodrag"
-            bounds="window"
-        >
-            <div className={["handler", style.browserWrapper].join(" ")}>
-                <div className={style.browserTitle}>
-                    Open folder...
+        <div onMouseDown={e => {
+            console.log(e)
+            if (e.button === 2)
+                setContextMenu({ x: e.clientX, y: e.clientY })
+            else
+                setContextMenu(null)
+        }}>
+            <Rnd
+                style={{ flex: 1, flexDirection: "column", display: "flex" }}
+                default={{ x: 0, y: 0, width: 800, height: 500 }}
+                minWidth={800} minHeight={500}
+                dragHandleClassName="handler"
+                cancel=".nodrag"
+                bounds="window"
+            >
+                <div className={["handler", style.browserWrapper].join(" ")}>
+                    <div className={style.browserTitle}>
+                        Open folder...
                 </div>
-                <div className="nodrag" style={{ flex: 1 }} >
-                    <FullFileBrowser
-                        folderChain={folderChain}
-                        files={files}
-                        onFileAction={modeMap[mode].onFileAction}
-                        fileActions={[...modeMap[mode].fileActions, ChonkyActions.EnableListView, ChonkyActions.EnableGridView]}
-                        defaultFileViewActionId="enable_list_view"
-                        ref={fileBrowserRef}
-                        disableDefaultFileActions={true}
-                        iconComponent={CustomIcons}
-                    />
+                    <div className="nodrag" style={{ flex: 1 }} >
+                        <FullFileBrowser
+                            folderChain={folderChain}
+                            files={files}
+                            onFileAction={modeMap[mode].onFileAction}
+                            fileActions={[...modeMap[mode].fileActions, ...SortActions, ...ViewActions]}
+                            defaultFileViewActionId="enable_list_view"
+                            ref={fileBrowserRef}
+                            disableDefaultFileActions={true}
+                            iconComponent={CustomIcons}
+                        />
+                    </div>
+                    <FileActionsButtons fileActions={modeMap[mode].fileActions} browserRef={fileBrowserRef} />
                 </div>
-                <FileActionsButtons fileActions={modeMap[mode].fileActions} browserRef={fileBrowserRef} />
-            </div>
-        </Rnd>
+            </Rnd>
+            {contextMenu !== null && <ContextMenu x={contextMenu.x} y={contextMenu.y} />}
+        </div>
     )
 }

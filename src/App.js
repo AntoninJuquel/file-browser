@@ -2,8 +2,8 @@ import { useState } from 'react';
 import Browser from './components/Browser';
 
 export default function App() {
-  const [mode, setMode] = useState("")
   const modes = ["", "card", "file", "folder"]
+  const [mode, setMode] = useState(modes[0])
 
   function modAction(data) {
     console.log("pouet", data)
