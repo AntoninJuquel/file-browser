@@ -1,0 +1,15 @@
+.browserWrapper {
+    display: flex;
+    flex: 1;
+    flex-grow: 1;
+    flex-direction: column;
+    background-color: black;
+    padding: 10px
+}
+
+.browserTitle {
+    display: flex;
+    background-color: #202020;
+    color: white;
+    justify-content: center
+}

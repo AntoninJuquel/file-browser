@@ -1,0 +1,26 @@
+button {
+    background-color: black;
+    color: white;
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+    margin-right: 10px;
+}
+
+button:hover {
+    color: #E50071;
+}
+
+button:focus {
+    color: #E50071;
+    outline-width: .5px;
+    outline-color: #E50071;
+    outline-style: solid;
+}
+
+.fileActionsBtnWrapper {
+    display: flex;
+    background-color: #202020;
+    justify-content: flex-end;
+    padding: 0 10px 10px 0;
+}

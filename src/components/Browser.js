@@ -6,9 +6,12 @@ import { Rnd } from "react-rnd";
 import { CustomIcons } from "../utils/IconsHandler";
 import { handleOpenFiles } from "../utils/ActionsHandler";
 import { scan, cancel, selectFolder } from "../utils/FileActions";
-import CustomButtons from "./CustomButtons";
+import FileActionsButtons from "./FileActionsButtons";
 
-export default function Browser({ mode, openSelection, connectors, style, darkMode }) {
+import './ChonkyStyle.css';
+import style from "./Browser.module.css";
+
+export default function Browser({ mode, openSelection, connectors }) {
     const [files, setFiles] = useState([null])
     const [folderChain, setFolderChain] = useState([null])
 
@@ -21,7 +24,7 @@ export default function Browser({ mode, openSelection, connectors, style, darkMo
                     r.name = unescape(r.name)
                 })
                 setFiles(result)
-                setFolderChain([{ name: "root", id: "root", isDir : true }])
+                setFolderChain([{ name: "root", id: "root", isDir: true }])
             })
             .catch(console.log)
     }, [])
@@ -61,7 +64,7 @@ export default function Browser({ mode, openSelection, connectors, style, darkMo
             fileActions: [scan, cancel],
             onFileAction: (data) => {
                 if (data.id === scan.id)
-                    console.log("scan")
+                    console.log(data)
                 else if (data.id === cancel.id)
                     console.log("cancel")
                 else if (data.id === ChonkyActions.OpenFiles.id && data.payload.targetFile.childrenCount !== undefined)
@@ -84,8 +87,8 @@ export default function Browser({ mode, openSelection, connectors, style, darkMo
             cancel=".nodrag"
             bounds="window"
         >
-            <div className="handler" style={{ display: "flex", flex: 1, flexGrow: 1, flexDirection: "column", backgroundColor: "black", padding: 10}}>
-                <div style={{display: "flex",backgroundColor: "#202020", color: "white", justifyContent: "center"}}>
+            <div className={["handler", style.browserWrapper].join(" ")}>
+                <div className={style.browserTitle}>
                     Open folder...
                 </div>
                 <div className="nodrag" style={{ flex: 1 }} >
@@ -98,10 +101,9 @@ export default function Browser({ mode, openSelection, connectors, style, darkMo
                         ref={fileBrowserRef}
                         disableDefaultFileActions={true}
                         iconComponent={CustomIcons}
-                        darkMode={darkMode}
                     />
                 </div>
-                <CustomButtons files={files} fileBrowserRef={fileBrowserRef} />
+                <FileActionsButtons fileActions={modeMap[mode].fileActions} browserRef={fileBrowserRef} />
             </div>
         </Rnd>
     )
