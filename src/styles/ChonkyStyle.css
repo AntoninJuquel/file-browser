@@ -90,6 +90,6 @@ button.chonky-activeButton {
 
 .chonky-browserMenuTooltip {}
 
-.selectionIndicator-0-3-30 {
-    background: rgba(229, 0, 113, .5)!important;
+div[class^='selectionIndicator'], div[class*=' selectionIndicator']{
+    background: rgba(229, 0, 113, .5) !important;
 }
