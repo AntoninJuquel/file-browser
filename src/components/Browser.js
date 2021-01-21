@@ -2,50 +2,32 @@ import React, { useState, useRef, useEffect } from "react";
 import { FullFileBrowser, ChonkyActions } from "chonky";
 import { Rnd } from "react-rnd";
 
-
 import { CustomIcons } from "../utils/IconsHandler";
-import { handleOpenFiles } from "../utils/ActionsHandler";
-import { scan, cancel, selectFolder } from "../utils/FileActions";
+import { handleCancel, handleOpenFiles, handleScan } from "../utils/ActionsHandler";
+import { scan, cancel, selectFolder, sortActions, viewActions } from "../utils/FileActions";
 import FileActionsButtons from "./FileActionsButtons";
 
 import "../styles/ChonkyStyle.css";
 import style from "./Browser.module.css";
-import ContextMenu from "./ContextMenu";
 
 export default function Browser({ mode, openSelection, connectors }) {
     const [files, setFiles] = useState([null])
     const [folderChain, setFolderChain] = useState([null])
 
-    const SortActions = [ChonkyActions.SortFilesByDate, ChonkyActions.SortFilesByName, ChonkyActions.SortFilesBySize]
-    const ViewActions = [ChonkyActions.EnableGridView, ChonkyActions.EnableListView]
-
     useEffect(() => {
-        fetch("http://localhost:3001/listDrives")
-            .then(res => res.json())
-            .then(result => {
-                result.forEach(r => {
-                    r.isDir = r.type !== "file"
-                    r.name = unescape(r.name)
-                })
-                setFiles(result)
-                setFolderChain([{ name: "root", id: "root", isDir: true }])
-            })
-            .catch(console.log)
+        let data = { payload: { files: [{ id: "root" }] } }
+        handleOpenFiles({data, setFiles, folderChain, setFolderChain})
     }, [])
 
-    function onFileAction(data) {
+    function defaultFileActions(data) {
         const handler = { data, files, setFiles, folderChain, setFolderChain, ChonkyActions }
-        //console.log(handler)
         console.log(data)
         switch (data.id) {
             case ChonkyActions.OpenFiles.id:
                 handleOpenFiles(handler)
                 break;
-            case ChonkyActions.OpenFileContextMenu.id:
-                fileBrowserRef.current.setFileSelection(new Set([data.payload.triggerFileId]))
-                break;
             default:
-                console.log(data)
+                console.log(handler)
                 break;
         }
     }
@@ -56,8 +38,7 @@ export default function Browser({ mode, openSelection, connectors }) {
             onFileAction: (data) => {
                 if (data.id === selectFolder.id)
                     openSelection(data)
-                else
-                    onFileAction(data)
+                else defaultFileActions(data)
             }
         },
         "file": {
@@ -65,66 +46,51 @@ export default function Browser({ mode, openSelection, connectors }) {
             onFileAction: (data) => {
                 if (data.id === ChonkyActions.OpenFiles.id && !data.payload.files[0].isDir)
                     console.log(data)
-                else
-                    onFileAction(data)
+                else defaultFileActions(data)
             }
         },
         "card": {
             fileActions: [scan, cancel],
             onFileAction: (data) => {
-                if (data.id === scan.id)
-                    console.log(data)
-                else if (data.id === cancel.id)
-                    console.log("cancel")
+                if (data.id === scan.id) handleScan(data)
+                else if (data.id === cancel.id) handleCancel(data)
                 else if (data.id === ChonkyActions.OpenFiles.id && data.payload.targetFile.childrenCount !== undefined)
                     openSelection({ folders: data.payload.files, list: folderChain[folderChain.length - 1].id, path: folderChain[folderChain.length - 1].id.join("\\") })
                 else if (data.id === ChonkyActions.MouseClickFile.id)
                     fileBrowserRef.current.setFileSelection(new Set([data.payload.file.id]))
-                else
-                    onFileAction(data)
+                else defaultFileActions(data)
             }
         }
     }
 
-    const [contextMenu, setContextMenu] = useState({ x: 0, y: 0 })
-
     const fileBrowserRef = useRef(null)
     return (
-        <div onMouseDown={e => {
-            console.log(e)
-            if (e.button === 2)
-                setContextMenu({ x: e.clientX, y: e.clientY })
-            else
-                setContextMenu(null)
-        }}>
-            <Rnd
-                style={{ flex: 1, flexDirection: "column", display: "flex" }}
-                default={{ x: 0, y: 0, width: 800, height: 500 }}
-                minWidth={800} minHeight={500}
-                dragHandleClassName="handler"
-                cancel=".nodrag"
-                bounds="window"
-            >
-                <div className={["handler", style.browserWrapper].join(" ")}>
-                    <div className={style.browserTitle}>
-                        Open folder...
+        <Rnd
+            style={{ flex: 1, flexDirection: "column", display: "flex" }}
+            default={{ x: 0, y: 0, width: 800, height: 500 }}
+            minWidth={800} minHeight={500}
+            dragHandleClassName="handler"
+            cancel=".nodrag"
+            bounds="window"
+        >
+            <div className={["handler", style.browserWrapper].join(" ")}>
+                <div className={style.browserTitle}>
+                    Open folder...
                 </div>
-                    <div className="nodrag" style={{ flex: 1 }} >
-                        <FullFileBrowser
-                            folderChain={folderChain}
-                            files={files}
-                            onFileAction={modeMap[mode].onFileAction}
-                            fileActions={[...modeMap[mode].fileActions, ...SortActions, ...ViewActions]}
-                            defaultFileViewActionId="enable_list_view"
-                            ref={fileBrowserRef}
-                            disableDefaultFileActions={true}
-                            iconComponent={CustomIcons}
-                        />
-                    </div>
-                    <FileActionsButtons fileActions={modeMap[mode].fileActions} browserRef={fileBrowserRef} />
+                <div className="nodrag" style={{ flex: 1 }} >
+                    <FullFileBrowser
+                        folderChain={folderChain}
+                        files={files}
+                        onFileAction={modeMap[mode].onFileAction}
+                        fileActions={[...modeMap[mode].fileActions, ...sortActions, ...viewActions]}
+                        defaultFileViewActionId={ChonkyActions.EnableListView.id}
+                        ref={fileBrowserRef}
+                        disableDefaultFileActions={true}
+                        iconComponent={CustomIcons}
+                    />
                 </div>
-            </Rnd>
-            {contextMenu !== null && <ContextMenu x={contextMenu.x} y={contextMenu.y} />}
-        </div>
+                <FileActionsButtons fileActions={modeMap[mode].fileActions} fileBrowserRef={fileBrowserRef} />
+            </div>
+        </Rnd>
     )
 }

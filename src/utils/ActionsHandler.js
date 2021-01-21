@@ -1,5 +1,12 @@
-export function handleOpenFiles(params) {
-    const { data, setFiles, folderChain, setFolderChain } = params
+function displayNewFiles(setFiles, files) {
+    files.forEach(r => r.name = unescape(r.name))
+    files.forEach(r => {
+        r.isDir = r.type !== "file"
+        r.name = unescape(r.name)
+    })
+    setFiles(files)
+}
+export function handleOpenFiles({ data, setFiles, folderChain, setFolderChain }) {
     let selectedFile = data.payload.files[0]
 
     setFolderChain([null])
@@ -8,13 +15,8 @@ export function handleOpenFiles(params) {
         fetch("http://localhost:3001/listDrives")
             .then(res => res.json())
             .then(result => {
-                result.forEach(r => r.name = unescape(r.name))
-                result.forEach(r => {
-                    r.isDir = r.type !== "file"
-                    r.name = unescape(r.name)
-                })
-                setFiles(result)
                 setFolderChain([{ name: "root", id: "root", isDir: true }])
+                displayNewFiles(setFiles,result)
             })
             .catch(console.log)
     else
@@ -25,11 +27,19 @@ export function handleOpenFiles(params) {
                 folderChain.slice(0, folderChain.indexOf(selectedFile) + 1) :
                 [...folderChain, selectedFile]
                 setFolderChain(newFolderChain.filter(folder => folder !== null))
-                result.items.forEach(r => {
-                    r.isDir = r.type !== "file"
-                    r.name = unescape(r.name)
-                })
-                setFiles(result.items)
+                displayNewFiles(setFiles,result.items)
             })
             .catch(console.log)
+}
+
+export function handleScan(data) {
+
+}
+
+export function handleCancel(data) {
+
+}
+
+export function handleSelectFolder(data) {
+
 }

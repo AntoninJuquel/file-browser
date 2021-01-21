@@ -1,15 +1,15 @@
 import style from "./FileActionsButtons.module.css";
 
-export default function FileActionsButtons({ fileActions = [], browserRef }) {
+export default function FileActionsButtons({ fileActions = [], fileBrowserRef }) {
     return (
         <div className={style.fileActionsBtnWrapper}>
-            {fileActions.map(action =>
+            {fileActions.map(fileAction =>
                 <button
-                    key={action.id}
+                    key={fileAction.id}
                     className="nodrag"
-                    onClick={() => browserRef.current.requestFileAction(action)}
+                    onClick={() => fileBrowserRef.current.requestFileAction(fileAction)}
                 >
-                    {action.button.name}
+                    {fileAction.button.name}
                 </button>
             )}
         </div>

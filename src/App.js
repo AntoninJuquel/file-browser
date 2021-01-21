@@ -18,7 +18,6 @@ export default function App() {
           mode={mode}
           openSelection={modAction}
           connectors={[]}
-          darkMode={false}
         />
       }
     </>
