@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import { FullFileBrowser, ChonkyActions } from "chonky";
 import { Rnd } from "react-rnd";
 
+import "../styles/ChonkyStyle.css";
+import style from "./Browser.module.css";
+
 import { CustomIcons } from "../utils/IconsHandler";
 import { handleCancel, handleOpenFiles, handleScan } from "../utils/ActionsHandler";
 import { scan, cancel, selectFolder, sortActions, viewActions } from "../utils/FileActions";
 import FileActionsButtons from "./FileActionsButtons";
-
-import "../styles/ChonkyStyle.css";
-import style from "./Browser.module.css";
 
 export default function Browser({ mode, openSelection, connectors }) {
     const [files, setFiles] = useState([null])
