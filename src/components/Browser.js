@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { FullFileBrowser, ChonkyActions } from "chonky";
 import { Rnd } from "react-rnd";
 
@@ -9,14 +9,16 @@ import { CustomIcons } from "../utils/IconsHandler";
 import { handleCancel, handleOpenFiles, handleScan } from "../utils/ActionsHandler";
 import { scan, cancel, selectFolder, sortActions, viewActions } from "../utils/FileActions";
 import FileActionsButtons from "./FileActionsButtons";
+import ContextMenu from "./ContextMenu";
 
 export default function Browser({ mode, openSelection, connectors }) {
     const [files, setFiles] = useState([null])
     const [folderChain, setFolderChain] = useState([null])
+    const [position, setPosition] = useState({ x: 0, y: 0 })
 
     useEffect(() => {
         let data = { payload: { files: [{ id: "root" }] } }
-        handleOpenFiles({data, setFiles, folderChain, setFolderChain})
+        handleOpenFiles({ data, setFiles, folderChain, setFolderChain })
     }, [])
 
     function defaultFileActions(data) {
@@ -25,6 +27,10 @@ export default function Browser({ mode, openSelection, connectors }) {
         switch (data.id) {
             case ChonkyActions.OpenFiles.id:
                 handleOpenFiles(handler)
+                break;
+            case ChonkyActions.OpenFileContextMenu.id:
+                contextMenuRef.current.setPosition({ x: data.payload.clientX - position.x, y: data.payload.clientY - position.y })
+                fileBrowserRef.current.setFileSelection(new Set([data.payload.triggerFileId]))
                 break;
             default:
                 console.log(handler)
@@ -36,21 +42,19 @@ export default function Browser({ mode, openSelection, connectors }) {
         "folder": {
             fileActions: [selectFolder, ChonkyActions.OpenSelection],
             onFileAction: (data) => {
-                if (data.id === selectFolder.id)
-                    openSelection(data)
+                if (data.id === selectFolder.id) openSelection(data)
                 else defaultFileActions(data)
             }
         },
         "file": {
             fileActions: [ChonkyActions.OpenSelection],
             onFileAction: (data) => {
-                if (data.id === ChonkyActions.OpenFiles.id && !data.payload.files[0].isDir)
-                    console.log(data)
+                if (data.id === ChonkyActions.OpenFiles.id && !data.payload.files[0].isDir) openSelection(data)
                 else defaultFileActions(data)
             }
         },
         "card": {
-            fileActions: [scan, cancel],
+            fileActions: [folderChain.length > 1 ? scan : null, cancel],
             onFileAction: (data) => {
                 if (data.id === scan.id) handleScan(data)
                 else if (data.id === cancel.id) handleCancel(data)
@@ -63,15 +67,19 @@ export default function Browser({ mode, openSelection, connectors }) {
         }
     }
 
+    const contextMenuRef = useRef(null)
     const fileBrowserRef = useRef(null)
     return (
         <Rnd
             style={{ flex: 1, flexDirection: "column", display: "flex" }}
-            default={{ x: 0, y: 0, width: 800, height: 500 }}
+            default={{ width: 800, height: 500 }}
             minWidth={800} minHeight={500}
             dragHandleClassName="handler"
             cancel=".nodrag"
             bounds="window"
+            onDragStop={(e, d) => setPosition({ x: d.x, y: d.y })}
+            onDragStart={() => contextMenuRef.current.setPosition({ x: null, y: null })}
+            position={position}
         >
             <div className={["handler", style.browserWrapper].join(" ")}>
                 <div className={style.browserTitle}>
@@ -91,6 +99,7 @@ export default function Browser({ mode, openSelection, connectors }) {
                 </div>
                 <FileActionsButtons fileActions={modeMap[mode].fileActions} fileBrowserRef={fileBrowserRef} />
             </div>
+            <ContextMenu ref={contextMenuRef} fileBrowserRef={fileBrowserRef} />
         </Rnd>
     )
 }

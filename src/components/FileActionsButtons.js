@@ -3,7 +3,7 @@ import style from "./FileActionsButtons.module.css";
 export default function FileActionsButtons({ fileActions = [], fileBrowserRef }) {
     return (
         <div className={style.fileActionsBtnWrapper}>
-            {fileActions.map(fileAction =>
+            {fileActions.filter(fileAction => fileAction !== null).map(fileAction =>
                 <button
                     key={fileAction.id}
                     className="nodrag"

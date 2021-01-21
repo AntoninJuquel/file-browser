@@ -5,6 +5,10 @@ ChonkyActions.OpenSelection.button.group = ""
 ChonkyActions.OpenSelection.button.icon = ""
 ChonkyActions.OpenSelection.button.toolbar = false
 
+ChonkyActions.OpenFileContextMenu = defineFileAction({
+    id : "open_file_context_menu",
+})
+
 export const sortActions = [ChonkyActions.SortFilesByDate, ChonkyActions.SortFilesByName, ChonkyActions.SortFilesBySize]
 export const viewActions = [ChonkyActions.EnableGridView, ChonkyActions.EnableListView]
 
