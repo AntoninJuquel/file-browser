@@ -3,9 +3,26 @@ import Browser from '../../components/Browser'
 
 export default {
     title: 'Browser',
-    component: Browser
+    component: Browser,
+    args: {
+        openSelection: (data) => console.log(data),
+        conectors: []
+    }
 }
 
-export const Card = () => <Browser mode='card' openSelection={(data) => console.log(data)} connectors={[]} />
-export const File = () => <Browser mode='file' openSelection={(data) => console.log(data)} connectors={[]} />
-export const Folder = () => <Browser mode='folder' openSelection={(data) => console.log(data)} connectors={[]} />
+const Template = args => <Browser {...args} />
+
+export const Card = Template.bind({})
+Card.args = {
+    mode: "card",
+}
+
+export const File = Template.bind({})
+File.args = {
+    mode: "file",
+}
+
+export const Folder = Template.bind({})
+Folder.args = {
+    mode: "folder",
+}

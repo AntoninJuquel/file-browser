@@ -1,3 +1,5 @@
+import { fetchListDrives, fetchBrowse } from "./api";
+
 function displayNewFiles(setFiles, files) {
     files.forEach(r => r.name = unescape(r.name))
     files.forEach(r => {
@@ -12,24 +14,22 @@ export function handleOpenFiles({ data, setFiles, folderChain, setFolderChain })
     setFolderChain([null])
     setFiles([null])
     if (selectedFile.id === "root")
-        fetch("http://localhost:3001/listDrives")
-            .then(res => res.json())
-            .then(result => {
+        fetchListDrives().then(
+            result => {
                 setFolderChain([{ name: "root", id: "root", isDir: true }])
-                displayNewFiles(setFiles,result)
-            })
-            .catch(console.log)
+                displayNewFiles(setFiles, result)
+            }
+        )
     else
-        fetch("http://localhost:3001/browse/" + selectedFile.id)
-            .then(res => res.json())
-            .then(result => {
+        fetchBrowse(selectedFile.id).then(
+            result => {
                 let newFolderChain = folderChain.includes(selectedFile) ?
-                folderChain.slice(0, folderChain.indexOf(selectedFile) + 1) :
-                [...folderChain, selectedFile]
+                    folderChain.slice(0, folderChain.indexOf(selectedFile) + 1) :
+                    [...folderChain, selectedFile]
                 setFolderChain(newFolderChain.filter(folder => folder !== null))
-                displayNewFiles(setFiles,result.items)
-            })
-            .catch(console.log)
+                displayNewFiles(setFiles, result.items)
+            }
+        )
 }
 
 export function handleScan(data) {
