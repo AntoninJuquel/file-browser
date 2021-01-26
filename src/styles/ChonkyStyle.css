@@ -3,9 +3,11 @@
     border-radius: 0 !important;
     border-width: 0 !important;
     font-family: 'Open Sans', sans-serif !important;
+    color: #202020 !important;
 }
 
 .chonky-fileDragPreview {}
+
 
 /* Icons & buttons */
 
@@ -21,6 +23,7 @@ button.chonky-activeButton {
     color: #E50071 !important;
 }
 
+
 /* Navbar */
 
 .chonky-navbarWrapper {}
@@ -34,13 +37,16 @@ button.chonky-activeButton {
 .chonky-navbarBreadcrumbs {
     background-color: #EEEEEE;
     border-radius: 2px;
+    color: #202020 !important;
 }
 
 .chonky-separator {}
 
+
 /* Toolbar */
 
 .chonky-toolbarWrapper {
+    color: #202020 !important;
     background-color: white !important;
     padding: 10px !important;
 }
@@ -52,6 +58,7 @@ button.chonky-activeButton {
 .chonky-toolbarRight {}
 
 .chonky-toolbarLeftFiller {}
+
 
 /* Info */
 
@@ -65,6 +72,7 @@ button.chonky-activeButton {
     color: #E50071 !important;
 }
 
+
 /* Search field */
 
 .chonky-searchFieldContainer {}
@@ -72,6 +80,7 @@ button.chonky-activeButton {
 .chonky-searchIcon {}
 
 .chonky-searchFieldInputInner {}
+
 
 /* File */
 
@@ -82,7 +91,9 @@ button.chonky-activeButton {
 .chonky-fileListWrapper {
     background-color: white !important;
     padding: 10px !important;
+    color: #202020 !important;
 }
+
 
 /* Context menu */
 
@@ -90,6 +101,7 @@ button.chonky-activeButton {
 
 .chonky-browserMenuTooltip {}
 
-div[class^='selectionIndicator'], div[class*=' selectionIndicator']{
+div[class^='selectionIndicator'],
+div[class*=' selectionIndicator'] {
     background: rgba(229, 0, 113, .5) !important;
 }

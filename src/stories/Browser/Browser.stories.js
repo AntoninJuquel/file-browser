@@ -7,10 +7,23 @@ export default {
     args: {
         openSelection: (data) => console.log(data),
         conectors: []
+    },
+    argTypes: {
+        mode: {
+            control: {
+                type: 'select',
+                options: [
+                    'card',
+                    'file',
+                    'folder'
+                ],
+            },
+        }
     }
 }
 
-const Template = args => <Browser {...args} />
+const Template = args => < Browser {...args }
+/>
 
 export const Card = Template.bind({})
 Card.args = {
